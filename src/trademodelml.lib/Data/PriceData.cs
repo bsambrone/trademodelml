@@ -6,19 +6,9 @@ namespace trademodelml.lib.Data
     public class PriceData
     {
         /// <summary>
-        /// Gets or sets the sector that contains this symbol's industry.
+        /// Get or sets the instrument that the prices belong to.
         /// </summary>
-        public string Sector { get; set; }
-
-        /// <summary>
-        /// Gets or sets the industry that contains this symbol.
-        /// </summary>
-        public string Industry { get; set; }
-
-        /// <summary>
-        /// Gets or sets the stock symbol associated with this dataset.
-        /// </summary>
-        public string Symbol { get; set; }        
+        public Instrument Instrument { get; set; }
 
         /// <summary>
         /// Gets or sets the internal SortedList of prices
