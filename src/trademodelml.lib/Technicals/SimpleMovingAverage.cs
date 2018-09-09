@@ -5,7 +5,7 @@ namespace trademodelml.lib.Technicals
 {
     public static class SimpleMovingAverage
     {
-        public static double[] CalculateSimpleMovingAverage(this double[] data, int periods)
+        public static double[] Calculate(this double[] data, int periods)
         {
             double[] returnValues = new double[data.Length];
 
