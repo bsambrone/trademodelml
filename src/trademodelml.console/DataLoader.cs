@@ -24,7 +24,7 @@ namespace trademodelml.console
             using (var conn = new SqlConnection(Connstring))
             {
                 conn.Open();
-                string cmdtext = "SELECT OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,CandleStart FROM Prices WHERE InstrumentID = (SELECT InstrumentID FROM Instruments WHERE Symbol = @symbol) AND PriceStart >= @start AND PriceEnd <= @end ORDER BY PriceStart";
+                string cmdtext = "SELECT OpenPrice,HighPrice,LowPrice,ClosePrice,Volume,CandleStart FROM Prices WHERE InstrumentID = (SELECT InstrumentID FROM Instruments WHERE Symbol = @symbol) AND CandleStart >= @start AND CandleEnd <= @end ORDER BY CandleStart";
                 var cmd = new SqlCommand(cmdtext,conn);
                 cmd.Parameters.Add(new SqlParameter("symbol", symbol));
                 cmd.Parameters.Add(new SqlParameter("start", start));
@@ -34,10 +34,10 @@ namespace trademodelml.console
                 {
                     var candle = new Price
                     {
-                        Open = reader.GetDouble(0),
-                        High = reader.GetDouble(1),
-                        Low = reader.GetDouble(2),
-                        Close = reader.GetDouble(3),
+                        Open = Convert.ToDouble(reader.GetDecimal(0)),
+                        High = Convert.ToDouble(reader.GetDecimal(1)),
+                        Low = Convert.ToDouble(reader.GetDecimal(2)),
+                        Close = Convert.ToDouble(reader.GetDecimal(3)),
                         Volume = reader.GetInt32(4)
                     };
 
