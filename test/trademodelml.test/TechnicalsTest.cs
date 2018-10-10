@@ -27,7 +27,7 @@ namespace trademodelml.test
             model.Prices.Add(new DateTime(2018,1,10), new Price { Open = 4.1, High = 4.2, Low = 3.2, Close = 3.8 });
 
             // test
-            var calculated = model.Prices.CalculateWilliamsR(periods);
+            var calculated = WilliamsR.Calculate(model.Prices, periods);
             
             // assert            
             Assert.NotEmpty(calculated);

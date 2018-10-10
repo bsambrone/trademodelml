@@ -13,7 +13,7 @@ namespace trademodelml.lib.Technicals
         /// <param name="prices">The source price dataset.</param>
         /// <param name="periods">Lookback periods. Default is 14</param>
         /// <returns>A sorted list arranged the same as the underlying data with the ATR.</returns>
-        public static SortedList<DateTime,double> CalculateWilliamsR(this SortedList<DateTime, Price> prices, int periods)
+        public static SortedList<DateTime,double> Calculate(this SortedList<DateTime, Price> prices, int periods)
         {
             if (periods > prices.Values.Count - 1) throw new ArgumentException("Lookback periods must not exceed length of reference data");
             var returnValues = new SortedList<DateTime, double>();

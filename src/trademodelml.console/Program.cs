@@ -1,4 +1,5 @@
 ﻿using System;
+using trademodelml.lib;
 using trademodelml.lib.Data;
 using trademodelml.lib.Models;
 
@@ -8,24 +9,25 @@ namespace trademodelml.console
     {
         static void Main(string[] args)
         {
+            // load up our data
             DateTime startDate = new DateTime(2010,1,1);
             DateTime endDate = new DateTime(2014,1,1);
             string symbol = "AAPL";
             var loader = new DataLoader();
-            var dataSet = loader.LoadData(symbol, startDate, endDate);
+            var rawDataSet = loader.LoadData(symbol, startDate, endDate);
+            var generator = new ComputedPriceGenerator();
+            var computedPrices = generator.Generate(rawDataSet.Prices);
 
-            var testingSet = dataSet.Prices.TakeTestingSet(20);
-            var trainingSet = dataSet.Prices.TakeTrainingSet(80);
+            var testingSet = computedPrices.TakeTestingSet(20);
+            var trainingSet = computedPrices.TakeTrainingSet(80);
             
             var writer = new CsvGenerator();
             var dataPath = writer.CreateCsv(trainingSet);
             var testPath = writer.CreateCsv(testingSet);
 
+            // setup modeling
             var trainer = new Trainer();
-            var model = trainer.Train(dataPath);
-
-            var evaluator = new Evaluator();
-            var metrics = evaluator.Evaluate(testPath, model);
+            trainer.TrainAndEvaluate(dataPath, testPath);
 
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
