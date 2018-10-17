@@ -20,27 +20,26 @@ namespace trademodelml.lib.Models
             (
                 features: c.LoadFloat(0, 7),
                 label: c.LoadFloat(8)
-            ));
+            ), hasHeader:true, separator: ',');
 
-            // make the estimator and predictor
+            // make the learning pipeline
             FastTreeRegressionPredictor pred = null;            
             var ctx = new RegressionContext(EnvironmentContainer.Instance);
-            var est = reader.MakeNewEstimator()
+            var learningPipeline  = reader.MakeNewEstimator()
                 .Append(r => (r.label, score: ctx.Trainers.FastTree(r.label, r.features,
                     numTrees: 10,
                     numLeaves: 5,
                     onFit: (p) => { pred = p; })));
             
-            // make the learning pipe
-            var pipe = reader.Append(est);
+            // make the lazy data loaders
+            var trainData = reader.Read(new MultiFileSource(dataPath));
+            var testData = reader.Read(new MultiFileSource(testPath));
 
-            // make the model
-            var dataSource = new MultiFileSource(dataPath);
-            var model = pipe.Fit(dataSource);
-            var data = model.Read(dataSource);
+            // make the model            
+            var model = learningPipeline.Fit(trainData);
 
-            // get 
-            var metrics = ctx.Evaluate(data, r => r.label, r => r.score, new PoissonLoss());
+            // get the metrics
+            var metrics = ctx.Evaluate(model.Transform(testData), r => r.label, r => r.score, new PoissonLoss());
 
         }
     }

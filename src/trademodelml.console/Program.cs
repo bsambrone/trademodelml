@@ -30,7 +30,7 @@ namespace trademodelml.console
             trainer.TrainAndEvaluate(dataPath, testPath);
 
             Console.WriteLine("Press any key to exit.");
-            Console.ReadKey();
+            Console.Read();
         }
     }
 }
