@@ -26,7 +26,7 @@ namespace trademodelml.lib.Models
             FastTreeRegressionPredictor pred = null;            
             var ctx = new RegressionContext(EnvironmentContainer.Instance);
             var learningPipeline  = reader.MakeNewEstimator()
-                .Append(r => (r.label, score: ctx.Trainers.FastTree(r.label, r.features,
+                .Append(r => (r.label, score: ctx.Trainers.FastTree(label: r.label, features: r.features.Normalize(),
                     numTrees: 10,
                     numLeaves: 5,
                     onFit: (p) => { pred = p; })));
